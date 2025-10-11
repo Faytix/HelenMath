@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="RU">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Метод Зейделя: Онлайн Решатель СЛАУ</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+    <div class="background"></div>
+    <div class="container">
+        <div class="lang-switcher">
+            <button onclick="switchLanguage('ru')">RU</button>
+            <button onclick="switchLanguage('en')">EN</button>
+        </div>
+        <div id="theory-section">
+            <h1 data-lang="ru">Метод Зейделя для решения СЛАУ</h1>
+            <h1 data-lang="en">Gauss-Seidel Method for Solving SLAE</h1>
+            <p data-lang="ru">Метод Зейделя (или метод Гаусса-Зейделя) — это итерационный метод для решения систем линейных алгебраических уравнений (СЛАУ) вида \( Ax = b \), где A — квадратная матрица, x — вектор неизвестных, b — вектор свободных членов.</p>
+            <p data-lang="en">The Gauss-Seidel method is an iterative technique for solving systems of linear algebraic equations (SLAE) of the form \( Ax = b \), where A is a square matrix, x is the vector of unknowns, and b is the vector of constants.</p>
+            
+            <h2 data-lang="ru">Формула</h2>
+            <h2 data-lang="en">Formula</h2>
+            <p data-lang="ru">На каждой итерации \( k+1 \), значение \( x_i^{(k+1)} \) вычисляется как:</p>
+            <p data-lang="en">On each iteration \( k+1 \), the value \( x_i^{(k+1)} \) is computed as:</p>
+            \[ x_i^{(k+1)} = \frac{1}{a_{ii}} \left( b_i - \sum_{j=1}^{i-1} a_{ij} x_j^{(k+1)} - \sum_{j=i+1}^{n} a_{ij} x_j^{(k)} \right) \]
+            
+            <h2 data-lang="ru">Условие сходимости</h2>
+            <h2 data-lang="en">Convergence Condition</h2>
+            <p data-lang="ru">Метод сходится, если матрица A имеет диагональное преобладание: для каждой строки \( |a_{ii}| \geq \sum_{j \neq i} |a_{ij}| \), с строгим неравенством хотя бы в одной строке.</p>
+            <p data-lang="en">The method converges if matrix A is diagonally dominant: for each row \( |a_{ii}| \geq \sum_{j \neq i} |a_{ij}| \), with strict inequality in at least one row.</p>
+            
+            <h2 data-lang="ru">Пример</h2>
+            <h2 data-lang="en">Example</h2>
+            <p data-lang="ru">Рассмотрим систему:</p>
+            <p data-lang="en">Consider the system:</p>
+            \[ 4x_1 + x_2 = 5 \]
+            \[ x_1 + 3x_2 = 4 \]
+            <p data-lang="ru">Начальное приближение: \( x^{(0)} = (0, 0) \), \(\epsilon = 0.01\).</p>
+            <p data-lang="en">Initial approximation: \( x^{(0)} = (0, 0) \), \(\epsilon = 0.01\).</p>
+            
+            <button onclick="showSolver()" data-lang="ru">Решить онлайн</button>
+            <button onclick="showSolver()" data-lang="en">Solve Online</button>
+        </div>
+        
+        <div id="solver-section" style="display: none;">
+            <h1 data-lang="ru">Решатель метода Зейделя</h1>
+            <h1 data-lang="en">Gauss-Seidel Solver</h1>
+            
+            <div class="input-group">
+                <label data-lang="ru">Размерность матрицы (n, от 1 до 10):</label>
+                <label data-lang="en">Matrix size (n, from 1 to 10):</label>
+                <input type="number" id="n" min="1" max="10" value="2">
+                <span class="guide-icon" onclick="toggleGuide('n-guide')">?</span>
+                <div id="n-guide" class="guide" style="display: none;">
+                    <p data-lang="ru">Введите целое число от 1 до 10. Пример: 3 для 3x3 матрицы.</p>
+                    <p data-lang="en">Enter an integer from 1 to 10. Example: 3 for a 3x3 matrix.</p>
+                </div>
+                <button onclick="generateInputs()" data-lang="ru">Сгенерировать поля</button>
+                <button onclick="generateInputs()" data-lang="en">Generate Fields</button>
+            </div>
+            
+            <div id="matrix-inputs"></div>
+            
+            <div class="input-group">
+                <label data-lang="ru">Начальное приближение x0 (через запятую):</label>
+                <label data-lang="en">Initial approximation x0 (comma-separated):</label>
+                <input type="text" id="x0">
+                <span class="guide-icon" onclick="toggleGuide('x0-guide')">?</span>
+                <div id="x0-guide" class="guide" style="display: none;">
+                    <p data-lang="ru">Введите n чисел через запятую. Пример: 0,0 для n=2.</p>
+                    <p data-lang="en">Enter n numbers comma-separated. Example: 0,0 for n=2.</p>
+                </div>
+            </div>
+            
+            <div class="input-group">
+                <label data-lang="ru">Точность epsilon:</label>
+                <label data-lang="en">Accuracy epsilon:</label>
+                <input type="number" id="epsilon" value="0.001" step="0.0001">
+                <span class="guide-icon" onclick="toggleGuide('epsilon-guide')">?</span>
+                <div id="epsilon-guide" class="guide" style="display: none;">
+                    <p data-lang="ru">Положительное число меньше 1. Пример: 0.001.</p>
+                    <p data-lang="en">Positive number less than 1. Example: 0.001.</p>
+                </div>
+            </div>
+            
+            <div class="input-group">
+                <label data-lang="ru">Максимальное количество итераций (до 100):</label>
+                <label data-lang="en">Max iterations (up to 100):</label>
+                <input type="number" id="maxIter" min="1" max="100" value="100">
+                <span class="guide-icon" onclick="toggleGuide('maxIter-guide')">?</span>
+                <div id="maxIter-guide" class="guide" style="display: none;">
+                    <p data-lang="ru">От 1 до 100 для предотвращения нагрузки на сайт.</p>
+                    <p data-lang="en">From 1 to 100 to prevent site overload.</p>
+                </div>
+            </div>
+            
+            <div class="input-group">
+                <label data-lang="ru">Тип нормы для ошибки:</label>
+                <label data-lang="en">Norm type for error:</label>
+                <select id="normType">
+                    <option value="euclidean" data-lang="ru">Евклидова</option>
+                    <option value="euclidean" data-lang="en">Euclidean</option>
+                    <option value="max" data-lang="ru">Максимум</option>
+                    <option value="max" data-lang="en">Max</option>
+                </select>
+                <span class="guide-icon" onclick="toggleGuide('norm-guide')">?</span>
+                <div id="norm-guide" class="guide" style="display: none;">
+                    <p data-lang="ru">Выберите норму для оценки ошибки сходимости.</p>
+                    <p data-lang="en">Choose norm for convergence error estimation.</p>
+                </div>
+            </div>
+            
+            <button onclick="loadExample()" data-lang="ru">Загрузить пример</button>
+            <button onclick="loadExample()" data-lang="en">Load Example</button>
+            
+            <button onclick="solve()" data-lang="ru">Решить</button>
+            <button onclick="solve()" data-lang="en">Solve</button>
+            
+            <div id="warning" style="display: none;"></div>
+            <div id="results"></div>
+            <canvas id="chart" style="display: none;"></canvas>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

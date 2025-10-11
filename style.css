@@ -1,0 +1,166 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #1a1a1a; /* Slightly lighter than dark */
+    color: #e0e0e0;
+    margin: 0;
+    padding: 20px;
+    overflow-x: hidden;
+}
+
+.background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: black;
+    z-index: -1;
+    overflow: hidden;
+}
+
+.background::before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px);
+    background-size: 20px 20px;
+    animation: twinkle 5s infinite;
+}
+
+@keyframes twinkle {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+.container {
+    max-width: 800px;
+    margin: auto;
+    padding: 20px;
+    background: rgba(50, 50, 50, 0.8);
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.5);
+}
+
+.lang-switcher {
+    text-align: right;
+}
+
+.lang-switcher button {
+    background: #333;
+    color: #fff;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+}
+
+h1, h2 {
+    color: #fff;
+}
+
+.input-group {
+    margin: 10px 0;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+input, select {
+    width: 100%;
+    padding: 5px;
+    background: #333;
+    color: #fff;
+    border: 1px solid #555;
+}
+
+button {
+    background: #4CAF50;
+    color: white;
+    padding: 10px;
+    border: none;
+    cursor: pointer;
+    margin: 10px 0;
+}
+
+button:hover {
+    background: #45a049;
+}
+
+.guide-icon {
+    cursor: pointer;
+    color: #ff0;
+    margin-left: 10px;
+}
+
+.guide {
+    background: #444;
+    padding: 10px;
+    border-radius: 5px;
+    margin-top: 5px;
+    animation: slow-open 0.5s ease-in-out;
+}
+
+@keyframes slow-open {
+    from { opacity: 0; transform: scale(0.9); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+.blink {
+    animation: blink 1s infinite;
+}
+
+@keyframes blink {
+    50% { background: #666; }
+}
+
+#warning {
+    background: #ffcc00;
+    color: #000;
+    padding: 10px;
+    border-radius: 5px;
+    animation: fade-in 0.5s;
+}
+
+@keyframes fade-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+}
+
+th, td {
+    border: 1px solid #555;
+    padding: 5px;
+    text-align: center;
+}
+
+@media (max-width: 600px) {
+    .container {
+        padding: 10px;
+    }
+    input, select {
+        font-size: 14px;
+    }
+}
+
+[data-lang="en"] {
+    display: none;
+}
+
+[data-lang="ru"] {
+    display: block;
+}
+
+.en [data-lang="en"] {
+    display: block;
+}
+
+.en [data-lang="ru"] {
+    display: none;
+}
