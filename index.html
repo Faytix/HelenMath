@@ -16,6 +16,7 @@
             <button onclick="switchLanguage('ru')">RU</button>
             <button onclick="switchLanguage('en')">EN</button>
         </div>
+
         <div id="theory-section">
             <h1 data-lang="ru">Метод Зейделя для решения СЛАУ</h1>
             <h1 data-lang="en">Gauss-Seidel Method for Solving SLAE</h1>
@@ -107,11 +108,6 @@
                     <option value="max" data-lang="ru">Максимум</option>
                     <option value="max" data-lang="en">Max</option>
                 </select>
-                <span class="guide-icon" onclick="toggleGuide('norm-guide')">?</span>
-                <div id="norm-guide" class="guide" style="display: none;">
-                    <p data-lang="ru">Выберите норму для оценки ошибки сходимости.</p>
-                    <p data-lang="en">Choose norm for convergence error estimation.</p>
-                </div>
             </div>
             
             <button onclick="loadExample()" data-lang="ru">Загрузить пример</button>

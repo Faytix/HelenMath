@@ -35,6 +35,15 @@ function generateInputs() {
         html += `<input type="number" id="b${i}" value="0"> `;
     }
     html += '</div>';
+
+    // 🔹 Новая подсказка о вводе дробей и целых чисел
+    html += `
+        <div class="note">
+            <p data-lang="ru">💡 Если хотите написать дробное число, допускается ввод через запятую или точку. Для целых чисел достаточно простого числа.</p>
+            <p data-lang="en">💡 You can use either a comma or a dot for decimal numbers. For integers, just type a whole number.</p>
+        </div>
+    `;
+
     document.getElementById('matrix-inputs').innerHTML = html;
 }
 
@@ -64,22 +73,18 @@ function getMatrix(n, prefix) {
     let mat = [];
     for (let i = 0; i < n; i++) {
         if (prefix === 'b') {
-            const val = parseFloat(document.getElementById(`${prefix}${i}`).value);
+            const val = parseFloat(document.getElementById(`${prefix}${i}`).value.replace(',', '.'));
             if (isNaN(val)) {
                 alert(lang === 'ru' ? 'Неверное значение в b!' : 'Invalid value in b!');
-                document.getElementById(`${prefix}${i}`).value = '';
-                toggleGuide('x0-guide', true); // Similar guide
                 throw new Error();
             }
             mat.push(val);
         } else {
             let row = [];
             for (let j = 0; j < n; j++) {
-                const val = parseFloat(document.getElementById(`${prefix}${i}${j}`).value);
+                const val = parseFloat(document.getElementById(`${prefix}${i}${j}`).value.replace(',', '.'));
                 if (isNaN(val)) {
                     alert(lang === 'ru' ? 'Неверное значение в A!' : 'Invalid value in A!');
-                    document.getElementById(`${prefix}${i}${j}`).value = '';
-                    toggleGuide('x0-guide', true); // Reuse as example
                     throw new Error();
                 }
                 row.push(val);
@@ -115,42 +120,27 @@ function solve() {
     try {
         A = getMatrix(n, 'a');
         b = getMatrix(n, 'b');
-        x0 = document.getElementById('x0').value.split(',').map(parseFloat);
+        x0 = document.getElementById('x0').value.split(',').map(s => parseFloat(s.replace(',', '.')));
         if (x0.length !== n || x0.some(isNaN)) {
             alert(lang === 'ru' ? 'Неверный x0!' : 'Invalid x0!');
-            document.getElementById('x0').value = '';
-            toggleGuide('x0-guide', true);
             return;
         }
         epsilon = parseFloat(document.getElementById('epsilon').value);
-        if (isNaN(epsilon) || epsilon <= 0) {
-            alert(lang === 'ru' ? 'Неверный epsilon!' : 'Invalid epsilon!');
-            document.getElementById('epsilon').value = '';
-            toggleGuide('epsilon-guide', true);
-            return;
-        }
         maxIter = parseInt(document.getElementById('maxIter').value);
-        if (isNaN(maxIter) || maxIter < 1 || maxIter > 100) {
-            alert(lang === 'ru' ? 'Итерации от 1 до 100!' : 'Iterations from 1 to 100!');
-            document.getElementById('maxIter').value = '';
-            toggleGuide('maxIter-guide', true);
-            return;
-        }
         normType = document.getElementById('normType').value;
-    } catch (e) {
+    } catch {
         return;
     }
 
     if (!checkDiagonalDominance(A)) {
         const warning = document.getElementById('warning');
-        warning.innerHTML = lang === 'ru' ? 'Матрица не имеет диагонального преобладания! Попробуйте переставить уравнения для сходимости.' : 'Matrix is not diagonally dominant! Try reordering equations for convergence.';
+        warning.innerHTML = lang === 'ru'
+            ? 'Матрица не имеет диагонального преобладания! Попробуйте переставить уравнения для сходимости.'
+            : 'Matrix is not diagonally dominant! Try reordering equations for convergence.';
         warning.style.display = 'block';
-        warning.style.animation = 'fade-in 0.5s';
         setTimeout(() => warning.style.display = 'none', 5000);
         return;
     }
-
-    alert(lang === 'ru' ? 'Количество итераций ограничено до 100 для предотвращения нагрузки на сайт.' : 'Iterations limited to 100 to prevent site overload.');
 
     let x = [...x0];
     let iterations = [];
@@ -173,9 +163,9 @@ function solve() {
 
     let html = `<h2 data-lang="ru">Результаты:</h2><h2 data-lang="en">Results:</h2>`;
     html += `<p data-lang="ru">Итераций: ${iterations.length}</p><p data-lang="en">Iterations: ${iterations.length}</p>`;
-    html += '<table><tr><th data-lang="ru">Итерация</th><th data-lang="en">Iteration</th>';
+    html += '<table><tr><th>№</th>';
     for (let i = 0; i < n; i++) html += `<th>x${i+1}</th>`;
-    html += '<th data-lang="ru">Ошибка</th><th data-lang="en">Error</th></tr>';
+    html += '<th>Ошибка</th></tr>';
     iterations.forEach((it, k) => {
         html += `<tr><td>${k+1}</td>`;
         it.forEach(v => html += `<td>${v.toFixed(6)}</td>`);
@@ -195,3 +185,8 @@ function solve() {
     });
     document.getElementById('chart').style.display = 'block';
 }
+
+// Уведомление при загрузке сайта
+window.onload = function() {
+    alert("Работа сделана Сорокиным Александром Ивановичем группы 22-13");
+};
