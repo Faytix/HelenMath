@@ -13,6 +13,16 @@ function showSolver() {
     document.getElementById('solver-section').style.animation = 'fade-in 1s';
 }
 
+function showTheory() {
+    document.getElementById('solver-section').style.display = 'none';
+    document.getElementById('theory-section').style.display = 'block';
+    document.getElementById('theory-section').style.animation = 'fade-in 1s';
+    // Очистка результатов и графика при возврате (опционально)
+    document.getElementById('results').innerHTML = '';
+    document.getElementById('chart').style.display = 'none';
+    document.getElementById('warning').style.display = 'none';
+}
+
 function generateInputs() {
     const n = parseInt(document.getElementById('n').value);
     if (isNaN(n) || n < 1 || n > 10) {
